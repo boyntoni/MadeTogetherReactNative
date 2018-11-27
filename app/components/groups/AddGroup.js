@@ -66,11 +66,14 @@ class AddGroup extends Component {
     const { addGroup, navigation, account, jwtToken } = this.props;
     const isValid = this.validateForm();
     if (isValid) {
-        const group = {
-          owner: account.username,
-          groupMember: groupMember,
-        };
-        addGroup(group, navigation.navigate, jwtToken);
+      // Generate random number for ID
+      const id = Math.floor(Math.random() * 100000000000000);
+      const group = {
+        owner: account.username,
+        groupMember: groupMember,
+        id,
+      };
+      addGroup(group, navigation.navigate, jwtToken);
     } 
   }
 

@@ -46,7 +46,6 @@ class ViewInvitations extends Component {
     acceptInvitation = (group) => {
         const { navigation, acceptInvite, account, jwtToken } = this.props;
         const revisedInvitations = this.filterInvitations(account, group);
-        debugger
         const inviteDetails = {
             groupId: group.id,
             username: account.username,

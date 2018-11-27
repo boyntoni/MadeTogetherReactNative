@@ -2,10 +2,8 @@ import * as types from "./types";
 import { api } from "../lib/api";
 
 export const searchRestaurants = (searchData, jwtToken, navigate) => {
-  console.log(searchData);
   return (dispatch) => {
     const url = `${api}/restaurants/search`;
-    console.log(url);
     fetch(url, {
 			method: "POST",
 			headers: {

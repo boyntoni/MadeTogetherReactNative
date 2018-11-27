@@ -33,7 +33,7 @@ class NoGroup extends Component {
 
   componentDidUpdate(prevProps) {
     const { account } = this.props;
-    if (account.groupInvitations.length !== prevProps.account.groupInvitations.length) {
+    if (account && account.groupInvitations.length !== prevProps.account.groupInvitations.length) {
       this.setState({
         groupInvitations: account.groupInvitations,
       });

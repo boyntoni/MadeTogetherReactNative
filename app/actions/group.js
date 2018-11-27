@@ -36,11 +36,12 @@ export const addGroup = (group, navigate, jwtToken) => {
 			body: JSON.stringify(group)
 		}).then(response => response.json())
     .then((group) => {
-        if (group.errorMessage) {
-          throw new Error(group.errorMessage);
-        }
-        dispatch({type: types.FETCH_GROUP_SUCCESS, group });
-        return navigate("GroupHome");
+      if (group.errorMessage) {
+        throw new Error(group.errorMessage);
+      }
+      dispatch({ type: types.FETCH_GROUP_SUCCESS, group });
+      dispatch({ type: types.CREATE_GROUP_SUCCESS, groupId: group.id });
+      return navigate("GroupHome");
       }).catch((error) => {
         dispatch({ type: types.ERROR_HANDLER, payload: error.message });
       });
@@ -56,8 +57,8 @@ export const acceptInvite = (inviteDetails, navigate, jwtToken) => {
 				"Accept": "application/json",
         "Content-Type": "application/json",
         "Authorization": "Bearer " + jwtToken,
-        body: JSON.stringify(inviteDetails)
-			}
+      },
+      body: JSON.stringify(inviteDetails)
 		}).then(response => response.json())
     .then((responseJson) => {
       if (responseJson.errorMessage) {

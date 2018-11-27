@@ -15,7 +15,9 @@ export default function accountReducer(state = initialState.account, action) {
 			const newInvitations = state.groupInvitations.filter((invite) => {
 				return invite.id !== action.groupId;
 			});
-			return Object.assign({}, state, { groupInvitations: newInvitations });
+			return Object.assign({}, state, { groupInvitations: newInvitations, groupId: action.groupId });
+		case types.CREATE_GROUP_SUCCESS:
+			return Object.assign({}, state, { groupId: action.groupId });
 		default:
 			return state;
 	}

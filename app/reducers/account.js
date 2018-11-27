@@ -11,10 +11,11 @@ export default function accountReducer(state = initialState.account, action) {
 				group: action.account.group,
 				groupInvitations: action.account.groupInvitations,
 			});
-		case types.ACCEPT_INVITATION_SUCCESS:
-			return state
-		case types.REJECT_INVITATION_SUCCESS:
-			return state
+		case types.MODIFY_INVITATION_SUCCESS:
+			const newInvitations = state.groupInvitations.filter((invite) => {
+				return invite.id !== action.groupId;
+			});
+			return Object.assign({}, state, { groupInvitations: newInvitations });
 		default:
 			return state;
 	}

@@ -87,6 +87,8 @@ export default function groupReducer(state = initialState.group, action) {
             }
         case types.SET_ADD_RESTAURANT_FALSE:
             return Object.assign({}, state, { hasAdded: false });
+        case types.DELETE_GROUP_SUCCESS:
+            return Object.assign({}, state, { group: null });
         default:
             return state;
     }

@@ -42,27 +42,33 @@ class EditProfile extends Component {
     }
 
     handleRemove = () => {
-        const { deleteGroup, leaveGroup, jwtToken, account, group } = this.props;
+        const { deleteGroup, leaveGroup, jwtToken, account, group, navigation } = this.props;
         const { ownerIsUser } = this.state;
         this.setState({ hasChangedGroup: true });
         if (ownerIsUser) {
-            return deleteGroup(groupId, jwtToken);
+            return deleteGroup(group.id, jwtToken, navigation.navigate);
         }
         const newGroupMembers = group.members.filter(member => member !== account.username);
-        return leaveGroup(account.username, group.id, newGroupMembers, jwtToken);
+        return leaveGroup(account.username, group.id, newGroupMembers, jwtToken, navigation.navigate);
     };
 
     handleUpdatePassword = () => {
         const { newPassword, oldPassword } = this.state;
-        if (!newPassword || oldPassword) {
+        if (!newPassword || !oldPassword) {
             return this.setState({ errorText: "Must provide old and new password"});
         }
         Auth.currentAuthenticatedUser()
             .then(user => {
-                return Auth.changePassword(user, oldPassword, newPassword);
-            })
-            .then(() => {})
-            .catch(() => this.setState({ errorText: "There was an issue updating your password. Try again", oldPassword: null, newPassword: null }));
+                Auth.changePassword(user, oldPassword, newPassword)
+                .then(() => {
+                    return this.setState({
+                        errorText: null,
+                        newPassword: null,
+                        oldPassword: null,
+                        changingPassword: false,
+                    });
+                });
+            }).catch(() => this.setState({ errorText: "There was an issue updating your password. Try again", oldPassword: null, newPassword: null }));
     }
 
     handleNavigation = () => {
@@ -86,33 +92,34 @@ class EditProfile extends Component {
                     </View>
                     <View style={AddGroupStyles.primaryContainer}>
                         { !changingPassword && group ?
-                            <View style={{ flexDirection: "column", flex: 0.3, width: "80%", justifyContent: "space-around", alignItems: "center" }}>
-                                <Text style={primary.primaryText}>Change your password</Text>
-                                <Button
-                                    containerStyle={primary.shortButton}
-                                    style={primary.buttonFont}
-                                    title="Change Password"
-                                    name="Change Password"
-                                    accessibilityLabel="Change Password"
-                                    onPress={() => this.setState({ changingPassword: true })}>
-                                    Edit
-                                </Button>
+                            <View style={{ flexDirection: "column", flex: 1, width: "80%", justifyContent: "space-around", alignItems: "center" }}>
+                                <View style={{ flexDirection: "column", flex: 0.3, width: "80%", justifyContent: "space-around", alignItems: "center" }}>
+                                    <Text style={primary.primaryText}>Change your password</Text>
+                                    <Button
+                                        containerStyle={primary.shortButton}
+                                        style={primary.buttonFont}
+                                        title="Change Password"
+                                        name="Change Password"
+                                        accessibilityLabel="Change Password"
+                                        onPress={() => this.setState({ changingPassword: true })}>
+                                        Edit
+                                    </Button>
+                                </View>
+                                <View style={{ flexDirection: "column", flex: 0.3, width: "80%", justifyContent: "space-around", alignItems: "center" }}>
+                                    <Text style={primary.primaryText}>{ownerIsUser ? "Delete your group" : `Leave your group with ${group.owner}`}</Text>
+                                    <Button
+                                        containerStyle={primary.shortButton}
+                                        style={primary.buttonFont}
+                                        title="Submit"
+                                        name="Submit"
+                                        accessibilityLabel="Submit"
+                                        onPress={this.handleRemove}>
+                                        {ownerIsUser ? "Delete" : "Leave" }
+                                    </Button>
+                                </View>
                             </View>
                         :
-                            <View style={{ flexDirection: "column", flex: 0.3, width: "80%", justifyContent: "space-around", alignItems: "center" }}>
-                                <Text style={primary.primaryText}>{ownerIsUser ? "Delete your group" : `Leave your group with ${group.owner}`}</Text>
-                                <Button
-                                    containerStyle={primary.shortButton}
-                                    style={primary.buttonFont}
-                                    title="Submit"
-                                    name="Submit"
-                                    accessibilityLabel="Submit"
-                                    onPress={this.handleRemove}>
-                                    {ownerIsUser ? "Delete" : "Leave" }
-                                </Button>
-                            </View>
-                        }
-                        { changingPassword &&
+                            changingPassword &&
                             <View style={{ flexDirection: "column", flex: 1, width: "100%", justifyContent: "center", alignItems: "center" }}>
                                 <View style={{ flexDirection: "column", alignItems: "center", width: "100%", marginTop: 30, justifyContent: "space-around", flex: 0.6 }}>
                                     <TextInput

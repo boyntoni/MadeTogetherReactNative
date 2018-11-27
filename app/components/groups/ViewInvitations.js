@@ -55,13 +55,15 @@ class ViewInvitations extends Component {
     }
 
     removeInvitation = (group) => {
-        const { rejectInvite, account, jwtToken } = this.props;
+        const { rejectInvite, account, jwtToken, navigation } = this.props;
         const revisedInvitations = this.filterInvitations(account, group);
         const inviteDetails = {
             username: account.username,
             groupInvitations: revisedInvitations,
+            groupId: group.id,
+            ownerUsername: group.owner,
         };
-        rejectInvite(inviteDetails, jwtToken);
+        rejectInvite(inviteDetails, jwtToken, navigation.navigate);
         this.setState({ groupInvitations: revisedInvitations });
     }
 

@@ -43,13 +43,13 @@ export const addGroup = (group, navigate, jwtToken) => {
         return navigate("GroupHome");
       }).catch((error) => {
         dispatch({ type: types.ERROR_HANDLER, payload: error.message });
-      })
+      });
   }
 }
 
 export const acceptInvite = (inviteDetails, navigate, jwtToken) => {
   return (dispatch) => {
-    const url = `${api}/accounts/group/accept`;
+    const url = `${api}/group/accept`;
     fetch(url, {
 			method: "POST",
 			headers: {
@@ -63,20 +63,18 @@ export const acceptInvite = (inviteDetails, navigate, jwtToken) => {
       if (responseJson.errorMessage) {
         throw new Error(responseJson.errorMessage);
       }
-      dispatch({ type: types.FETCH_GROUP_SUCCESS, group: responseJson.group })
-    }).then(() => {
-      setTimeout(() => {
-        navigate("GroupHome")
-      }, 1000);
+      const { groupId } = inviteDetails;
+      dispatch({ type: types.MODIFY_INVITATION_SUCCESS, groupId });
+      return navigate("GroupHome");
     }).catch((error) => {
       dispatch({ type: types.ERROR_HANDLER, payload: error.message });
     })
   }
 }
 
-export const rejectInvite = (inviteDetails, jwtToken) => {
+export const rejectInvite = (inviteDetails, jwtToken, navigate) => {
   return (dispatch) => {
-    const url = `${api}/accounts/group/reject`;
+    const url = `${api}/group/reject`;
     fetch(url, {
 			method: "POST",
 			headers: {
@@ -90,14 +88,16 @@ export const rejectInvite = (inviteDetails, jwtToken) => {
       if (responseJson.errorMessage) {
         throw new Error(responseJson.errorMessage);
       }
-      dispatch({type: types.FETCH_ACCOUNT_SUCCESS, group: responseJson.group});
+      const { groupId } = inviteDetails;
+      dispatch({ type: types.MODIFY_INVITATION_SUCCESS, groupId });
+      return navigate("NoGroup");
     }).catch((error) => {
       dispatch({ type: types.ERROR_HANDLER, payload: error.message });
     });
   }
 }
 
-export const leaveGroup = (username, groupId, newGroupMembers, jwtToken) => {
+export const leaveGroup = (username, groupId, newGroupMembers, jwtToken, navigate) => {
   return (dispatch) => {
     const url = `${api}/accounts/group/leave`;
     fetch(url, {
@@ -113,14 +113,15 @@ export const leaveGroup = (username, groupId, newGroupMembers, jwtToken) => {
         if (responseJson.errorMessage) {
           throw new Error(responseJson.errorMessage);
         }
-        // dispatch({ type: types.LEAVE_GROUP_SUCCESS, group: responseJson.group });
+        dispatch({ type: types.DELETE_GROUP_SUCCESS });
+        return navigate("NoGroup");
       }).catch((error) => {
         dispatch({ type: types.ERROR_HANDLER, payload: error.message });
       });
   }
 }
 
-export const deleteGroup = (groupId, jwtToken) => {
+export const deleteGroup = (groupId, jwtToken, navigate) => {
   return (dispatch) => {
     const url = `${api}/accounts/group/reject/${groupId}`;
     fetch(url, {
@@ -135,7 +136,8 @@ export const deleteGroup = (groupId, jwtToken) => {
         if (responseJson.errorMessage) {
           throw new Error(responseJson.errorMessage);
         }
-        // dispatch({ type: types.DELETE_GROUP_SUCCESS, group: responseJson.group });
+        dispatch({ type: types.DELETE_GROUP_SUCCESS });
+        return navigate("NoGroup");
       }).catch((error) => {
         dispatch({ type: types.ERROR_HANDLER, payload: error.message });
       });

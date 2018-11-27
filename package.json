@@ -7,14 +7,15 @@
     "test": "jest"
   },
   "dependencies": {
-    "react": "16.6.0-alpha.8af6728",
-    "react-native": "0.57.3",
     "amazon-cognito-auth-js": "^1.2.4",
     "aws-amplify": "^1.0.6",
     "aws-amplify-react": "^1.0.6",
     "aws-amplify-react-native": "^1.0.6",
     "axios": "^0.16.2",
+    "merge": "^1.2.1",
     "prop-types": "^15.6.1",
+    "react": "16.6.0-alpha.8af6728",
+    "react-native": "0.57.3",
     "react-native-action-button": "^2.8.4",
     "react-native-button": "^2.3.0",
     "react-native-map-link": "^1.1.2",

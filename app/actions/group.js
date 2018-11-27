@@ -100,15 +100,15 @@ export const rejectInvite = (inviteDetails, jwtToken, navigate) => {
 
 export const leaveGroup = (username, groupId, newGroupMembers, jwtToken, navigate) => {
   return (dispatch) => {
-    const url = `${api}/accounts/group/leave`;
+    const url = `${api}/group/leave`;
     fetch(url, {
       method: "POST",
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Authorization": "Bearer " + jwtToken,
-        body: JSON.stringify({ username, groupId, newGroupMembers }),
       },
+      body: JSON.stringify({ username, groupId, newGroupMembers }),
     }).then(response => response.json())
       .then((responseJson) => {
         if (responseJson.errorMessage) {
@@ -124,7 +124,7 @@ export const leaveGroup = (username, groupId, newGroupMembers, jwtToken, navigat
 
 export const deleteGroup = (groupId, jwtToken, navigate) => {
   return (dispatch) => {
-    const url = `${api}/accounts/group/reject/${groupId}`;
+    const url = `${api}/group/delete/${groupId}`;
     fetch(url, {
       method: "DELETE",
       headers: {

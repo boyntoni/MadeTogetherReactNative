@@ -109,10 +109,10 @@ class RestaurantMap extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    account,
-    restaurants,
-    group,
-    geolocation,
+    account: state.account,
+    restaurants: state.restaurants,
+    group: state.group,
+    geolocation: state.geolocation,
   }
 }
 

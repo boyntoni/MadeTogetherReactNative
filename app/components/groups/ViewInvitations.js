@@ -6,6 +6,7 @@ import Button from "react-native-button";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import { withNavigation } from "react-navigation";
+import LoadingSpinner from "../LoadingSpinnner.js";
 
 import { acceptInvite, rejectInvite } from "../../actions/group";
 
@@ -28,6 +29,11 @@ class ViewInvitations extends Component {
         headerTitleStyle: primary.navFont
     };
 
+    state = {
+        isAccepting: false,
+        groupInvitations: [{ "owner": "ian", "groupId": 123123 }],
+    }
+
     componentWillMount() {
         const { account } = this.props;
         this.setState({
@@ -44,6 +50,7 @@ class ViewInvitations extends Component {
     }
 
     acceptInvitation = (group) => {
+        this.setState({ isAdding: true });
         const { navigation, acceptInvite, account, jwtToken } = this.props;
         const revisedInvitations = this.filterInvitations(account, group);
         const inviteDetails = {
@@ -74,12 +81,13 @@ class ViewInvitations extends Component {
     }
 
     renderInvitations = () => {
-        const { groupInvitations } = this.state;
+        const { groupInvitations, isAdding } = this.state;
         return groupInvitations.map((group, i) => {
             return (
                 <View key={i} style={{ flexDirection: "column", justifyContent: "space-around", alignItems: "center", width: "100%" }}>
-                    <Text style={primary.primaryText}>{group.owner} would like to make plans with you!</Text>
-                    <View style={{ flexDirection: "row", justifyContent: "space-around", width: "100%", marginTop: 5 }}>
+                    {!!isAdding && <LoadingSpinner isVisible={isAdding} />}
+                    { !isAdding && <Text style={primary.primaryText}>{group.owner} would like to make plans with you!</Text> }
+                    { !isAdding && <View style={{ flexDirection: "row", justifyContent: "space-around", width: "100%", marginTop: 5 }}>
                         <Button
                             onPress={this.acceptInvitation.bind(null, group)}
                             style={primary.buttonFont}
@@ -98,7 +106,7 @@ class ViewInvitations extends Component {
                             accessibilityLabel="Reject Invitation">
                             Reject
                         </Button>
-                    </View>
+                    </View> }
                 </View>
             );
         });

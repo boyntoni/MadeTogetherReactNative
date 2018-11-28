@@ -56,6 +56,6 @@ export default AppNavigator = createStackNavigator(
   },
   },
   {
-    initialRouteName: 'SignIn',
+    initialRouteName: 'ViewInvitations',
   }
 );

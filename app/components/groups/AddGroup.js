@@ -177,7 +177,7 @@ class AddGroup extends Component {
   }
 
   render() {
-    const { errorText, searchResult, groupMember } = this.state;
+    const { errorText } = this.state;
     return (
       <View style={containers.standardLayout}>
         <View style={{ flexDirection: "column", flexBasis: "60%", width: "100%"}}>

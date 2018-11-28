@@ -105,7 +105,7 @@ export default class RestaurantTile extends Component {
         <View key={restaurant._id} style={{ minHeight: 125, maxHeight: 125, flexDirection: "row", height: "100%", justifyContent: "center", alignItems: "center", borderBottomWidth: 1, borderBottomColor: colors.white}}>
           <View style={{flexDirection: "column", flex: 2, justifyContent: "space-around"}}>
             <View style={{flex: 2, flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
-              <View style={{flex: 2, flexDirection: "column", justifyContent: "flex-end", alignItems: "center"}}>
+              <View style={{flex: 2, paddingLeft: 10, flexDirection: "column", justifyContent: "flex-end", alignItems: "center"}}>
                 <Text style={ restaurantTile.restaurantName }>{ restaurant.name }</Text>
               </View>
               <View style={{width: "50%", height: 1, backgroundColor: colors.white, marginTop: 10, marginBottom: 10}}/>

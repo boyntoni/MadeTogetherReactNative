@@ -1489,7 +1489,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.boyntonian.MadeTogetherReactNative;
+				PRODUCT_BUNDLE_IDENTIFIER = com.madetogether.app;
 				PRODUCT_NAME = MadeTogetherReactNative;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1517,7 +1517,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.boyntonian.MadeTogetherReactNative;
+				PRODUCT_BUNDLE_IDENTIFIER = com.madetogether.app;
 				PRODUCT_NAME = MadeTogetherReactNative;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

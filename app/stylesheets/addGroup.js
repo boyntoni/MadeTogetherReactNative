@@ -5,7 +5,8 @@ export const AddGroupStyles = StyleSheet.create({
   headerContainer: {
     flexBasis: "15%",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    width: "95%",
   },
   primaryContainer: {
     flexBasis: "80%",

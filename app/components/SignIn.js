@@ -47,12 +47,12 @@ class SignIn extends Component {
     Auth.currentAuthenticatedUser().then((user) => {
       const { username, signInUserSession } = user;
       const { jwtToken } = signInUserSession.idToken; 
-      // if (jwtToken) {
-      //   setToken(jwtToken);
-      //   fetchAccount(username, navigation.navigate);
-      // } else {
+      if (jwtToken) {
+        setToken(jwtToken);
+        fetchAccount(username, navigation.navigate);
+      } else {
         this.setState({ isLoading: false });
-      // }
+      }
     }).catch(e => {
       this.setState({ isLoading: false });
     })

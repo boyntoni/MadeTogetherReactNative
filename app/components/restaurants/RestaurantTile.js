@@ -17,7 +17,11 @@ export default class RestaurantTile extends Component {
   }
 
   priceInSymbols = (price) => {
-    return "$".repeat(price);
+    if (price) {
+      return "$".repeat(price);
+    } else {
+      return "N/A";
+    }
   }
 
   handlePress = (restaurant, isSearch) => {

@@ -1,6 +1,7 @@
 import { createStackNavigator } from "react-navigation";
 
 import SignIn from "../components/SignIn";
+import LoadingSpinner from "../components/LoadingSpinnner";
 import VerifyAccount from "../components/VerifyAccount";
 import EditProfile from "../components/EditProfile";
 
@@ -18,44 +19,47 @@ import ItemHome from "../components/items/ItemHome";
 
 export default AppNavigator = createStackNavigator(
   {
-  SignIn: {
-    screen: SignIn,
-  },
-  VerifyAccount: {
-      screen: VerifyAccount,
-  },
-  EditProfile: {
-      screen: EditProfile,
-  },
-  RestaurantList: {
-    screen: RestaurantList,
-  },
-  AddRestaurant: {
-    screen: AddRestaurant,
-  },
-  NoGroup: {
-    screen: NoGroup,
-  },
-  ViewInvitations: {
-    screen: ViewInvitations,
-  },
-  GroupHome: {
-    screen: GroupHome,
-  },
-  AddGroup: {
-    screen: AddGroup,
-  },
-  RestaurantSearchResultList: {
-    screen: RestaurantSearchResultList,
-  },
-  RestaurantMap: {
-    screen: RestaurantMap,
-  },
-  ItemHome: {
-    screen: ItemHome,
-  },
+    SignIn: {
+      screen: SignIn,
+    },
+    VerifyAccount: {
+        screen: VerifyAccount,
+    },
+    EditProfile: {
+        screen: EditProfile,
+    },
+    RestaurantList: {
+      screen: RestaurantList,
+    },
+    AddRestaurant: {
+      screen: AddRestaurant,
+    },
+    NoGroup: {
+      screen: NoGroup,
+    },
+    ViewInvitations: {
+      screen: ViewInvitations,
+    },
+    GroupHome: {
+      screen: GroupHome,
+    },
+    AddGroup: {
+      screen: AddGroup,
+    },
+    RestaurantSearchResultList: {
+      screen: RestaurantSearchResultList,
+    },
+    RestaurantMap: {
+      screen: RestaurantMap,
+    },
+    ItemHome: {
+      screen: ItemHome,
+    },
+    LoadingSpinner: {
+      screen: LoadingSpinner,
+    }
   },
   {
-    initialRouteName: 'ViewInvitations',
+    initialRouteName: "SignIn",
   }
 );

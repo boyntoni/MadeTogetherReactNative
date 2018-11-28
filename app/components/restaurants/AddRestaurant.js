@@ -6,7 +6,6 @@ import Button from "react-native-button";
 import ActionButton from "react-native-action-button";
 import Icon from "react-native-vector-icons/Ionicons";
 import { withNavigation } from "react-navigation";
-import LoadingSpinner from "../LoadingSpinnner.js";
 import AddressSearchFields from "./AddressSearchFields";
 
 import { searchRestaurants } from "../../actions/restaurants";
@@ -26,7 +25,6 @@ class AddRestaurant extends Component {
     streetAddress: null,
     zip: null,
     city: null,
-    isSearching: false,
   }
 
 
@@ -38,7 +36,6 @@ class AddRestaurant extends Component {
   }
 
   componentDidMount() {
-    this.setState({ isSearching: false });
     navigator.geolocation.getCurrentPosition(
       (position) => {
         this.setState({
@@ -74,8 +71,8 @@ class AddRestaurant extends Component {
       latitude,
       searchTerm,
     };
-    this.setState({ isSearching: true });
     this.props.searchRestaurants(searchData, jwtToken, navigation.navigate);
+    return navigation.navigate("LoadingSpinner")
   }
 
   concatSearchTerms() {
@@ -114,7 +111,7 @@ class AddRestaurant extends Component {
   }
 
   render() {
-    const { searchParamater, error, isSearching } = this.state;
+    const { searchParamater, error } = this.state;
     const { serverError } = this.props;
     const displayError = error ? error : serverError;
     const nearSearchColor = searchParamater === "near" ? colors.primary : colors.lightGrey;
@@ -157,29 +154,28 @@ class AddRestaurant extends Component {
                   Near Address
                 </Button>
               </View>
-              {!!isSearching && <LoadingSpinner isVisible={isSearching} /> }
               {searchParamater === "near" ? <View style={containers.addressContainer} /> : <AddressSearchFields setStreet={this.setStreetAddress} setCity={this.setCity} setZip={this.setZip} /> }
             <View style={{ height: 30 }} /> 
             <View style={{ flexBasis: "20%", flexDirection: "column", justifyContent: "space-around", alignItems: "center" }}>
-              {!isSearching && <Button containerStyle={primary.button}
+              <Button containerStyle={primary.button}
                       style={primary.buttonFont}
                       title="Search"
                       name="Search"
                       accessibilityLabel="Find Restaurant"
                       onPress={() => { this.searchRestaurants() }}>
                       Search
-              </Button> }
+              </Button>
             <View style={{ height: 50 }} />
             { !!displayError && <Text style={primary.errorText}>{displayError}</Text>}
             </View>
           </View>
-        {!isSearching && <ActionButton
+          <ActionButton
           buttonColor={colors.primary}
           icon={<Icon name="md-undo" color={colors.white} size={25} />}
           name="home"
           position="left"
           onPress={() => { this.props.navigation.navigate("RestaurantList") }}
-        /> }
+        />
       </View>
     )
   }

@@ -7,7 +7,6 @@ import { showLocation } from "react-native-map-link";
 import { withNavigation } from "react-navigation";
 import ActionButton from "react-native-action-button";
 import Icon from "react-native-vector-icons/Ionicons";
-import LoadingSpinner from "../LoadingSpinnner.js";
 
 import RestaurantTile from "./RestaurantTile";
 
@@ -31,13 +30,8 @@ class RestaurantSearchResultList extends Component {
     headerTitleStyle: primary.navFont
   };
 
-  state = {
-    isAdding: false,
-  }
-
   handleAdd = (restaurant) => {
-    const { group, addItem, jwtToken } = this.props;
-    this.setState({ isAdding: true });
+    const { group, addItem, jwtToken, navigation } = this.props;
     const restaurantName = restaurant.name
     const restaurantObj = Object.assign({}, restaurant, { name: restaurantName, isFavorite: false });
     const itemDetails = {
@@ -48,13 +42,13 @@ class RestaurantSearchResultList extends Component {
         groupId: group.id,
     };
     addItem(itemDetails, jwtToken);
+    return navigation.navigate("LoadingSpinner");
   }
 
 componentDidUpdate(prevProps) {
   const hasAdded = prevProps.group.restaurants.length !== this.props.group.restaurants.length;
   if (hasAdded) {
     this.props.setAddRestaurantFalse();
-    this.setState({ isAdding: false });
     this.props.navigation.navigate("RestaurantList");
   }
 }
@@ -87,7 +81,6 @@ componentDidUpdate(prevProps) {
 
   render() {
     const { restaurants } = this.props;
-    const { isAdding } = this.state;
     const calculatedHeight = restaurants.length * 125;
     return (
       <View style={containers.standardLayout}>
@@ -111,21 +104,20 @@ componentDidUpdate(prevProps) {
             </Button>
           </View> 
         }
-        { !!isAdding && <LoadingSpinner isVisible={isAdding} /> }
-        { !isAdding && <ActionButton
+        <ActionButton
           buttonColor={colors.primary}
           icon={<Icon name="md-undo" color={colors.white} size={25} />}
           name="home"
           position="left"
           onPress={() => { this.props.navigation.navigate("RestaurantList") }}
-        /> }
-        { !isAdding && <ActionButton
+        />
+        <ActionButton
           buttonColor={colors.primary}
           icon={<Icon name="md-map" color={colors.white} size={25} />}
           name="md-map"
           position="right"
           onPress={() => { this.props.navigation.navigate("RestaurantMap", { searchView: "search" })}}
-        /> }
+        />
       </View>
     )
   }

@@ -46,10 +46,12 @@ class EditProfile extends Component {
         const { ownerIsUser } = this.state;
         this.setState({ hasChangedGroup: true });
         if (ownerIsUser) {
-            return deleteGroup(group.id, jwtToken, navigation.navigate);
+            deleteGroup(group.id, jwtToken, navigation.navigate);
+        } else {
+            const newGroupMembers = group.members.filter(member => member !== account.username);
+            leaveGroup(account.username, group.id, newGroupMembers, jwtToken, navigation.navigate);
         }
-        const newGroupMembers = group.members.filter(member => member !== account.username);
-        return leaveGroup(account.username, group.id, newGroupMembers, jwtToken, navigation.navigate);
+        return navigation.navigate("LoadingSpinner");
     };
 
     handleUpdatePassword = () => {

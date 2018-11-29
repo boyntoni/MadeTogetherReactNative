@@ -41,7 +41,7 @@ class RestaurantSearchResultList extends Component {
         itemType: "restaurants",
         groupId: group.id,
     };
-    addItem(itemDetails, jwtToken);
+    addItem(itemDetails, jwtToken, navigation.navigate);
     return navigation.navigate("LoadingSpinner");
   }
 

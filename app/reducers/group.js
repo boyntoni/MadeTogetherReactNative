@@ -8,16 +8,16 @@ export default function groupReducer(state = initialState.group, action) {
         case types.ADD_ITEM_SUCCESS:
             switch (action.itemType) {
                 case "movies":
-                    const newMovies = [...state.movies, action.newItem];
+                    const newMovies = [action.newItem, ...state.movies];
                     return Object.assign({}, state, { movies: newMovies });
                 case "shows":
-                    const newShows = [...state.shows, action.newItem];
+                    const newShows = [action.newItem, ...state.shows]
                     return Object.assign({}, state, { shows: newShows });
                 case "restaurants":
-                    const newRestaurants = [...state.restaurants, action.newItem];
+                    const newRestaurants = [action.newItem, ...state.restaurants]
                     return Object.assign({}, state, { restaurants: newRestaurants, hasAdded: true });
                 case "destinations":
-                    const newDestinations = [...state.destinations, action.newItem];
+                    const newDestinations = [action.newItem, ...state.destinations]
                     return Object.assign({}, state, { destinations: newDestinations });
                 default:
                     return state;

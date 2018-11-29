@@ -16,7 +16,8 @@ import { primary } from "../../stylesheets/primary";
 class GroupHome extends Component {
 
     state = {
-        menuItems: null
+        menuItems: null,
+        pollingInterval: null,
     }
     static propTypes = {
         account: PropTypes.object.isRequired,
@@ -34,6 +35,23 @@ class GroupHome extends Component {
         const { fetchGroup, account, jwtToken } = this.props;
         fetchGroup(account.groupId, jwtToken);
         this.renderImages();
+        this.initiatePolling();
+    }
+
+    initiatePolling = () => {
+        const pollingInterval = setInterval(this.fetchGroupUpdates, 20000);
+        this.setState({
+            pollingInterval,
+        })
+    }
+
+    fetchGroupUpdates = () => {
+        const { fetchGroup, account, jwtToken } = this.props;
+        fetchGroup(account.groupId, jwtToken);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.pollingInterval);
     }
 
     renderImages = () => {

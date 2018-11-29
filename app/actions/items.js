@@ -1,7 +1,7 @@
 import * as types from "./types";
 import { api } from "../lib/api";
 
-export const addItem = (itemDetails, jwtToken) => {
+export const addItem = (itemDetails, jwtToken, navigate) => {
     return (dispatch) => {
         const url =  `${api}/group/add-item`;
         fetch(url, {
@@ -19,7 +19,10 @@ export const addItem = (itemDetails, jwtToken) => {
                 }
                 const { itemType, newItem } = itemDetails;
                 const item = newItem[Object.keys(newItem)[0]];
-                return dispatch({ type: types.ADD_ITEM_SUCCESS, newItem: item, itemType });
+                dispatch({ type: types.ADD_ITEM_SUCCESS, newItem: item, itemType });
+                if (navigate) {
+                    return navigate("RestaurantList");
+                }
             }).catch((error) => {
                 dispatch({ type: types.ERROR_HANDLER, payload: error.message });
         });

@@ -74,6 +74,7 @@ class AddGroup extends Component {
         id,
       };
       addGroup(group, navigation.navigate, jwtToken);
+      return navigation.navigate("LoadingSpinner");
     } 
   }
 

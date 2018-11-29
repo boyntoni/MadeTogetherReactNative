@@ -59,7 +59,7 @@ class AddRestaurant extends Component {
     const { longitude, latitude, searchTerm, searchParamater } = this.state;
     const { navigation, jwtToken } = this.props;
     if (!searchTerm) {
-      this.setState({ error: "Please enter a valid search" })
+      return this.setState({ error: "Please enter a valid search" });
     }
     let searchAddress = null;
     if (searchParamater !== "near") {

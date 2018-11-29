@@ -50,6 +50,7 @@ class SignIn extends Component {
       if (jwtToken) {
         setToken(jwtToken);
         fetchAccount(username, navigation.navigate);
+        return navigation.navigate("LoadingSpinner");
       } else {
         this.setState({ isLoading: false });
       }
@@ -94,6 +95,7 @@ class SignIn extends Component {
           const { jwtToken } = signInUserSession.idToken;
           setToken(jwtToken);
           fetchAccount(username, navigation.navigate);
+          return navigation.navigate("LoadingSpinner");
         }).catch(err => {
           this.setState({ errorText: err.message});
         });

@@ -3,10 +3,9 @@ import * as colors from "./colors";
 
 export const AddGroupStyles = StyleSheet.create({
   headerContainer: {
-    flexBasis: "15%",
     alignItems: "center",
     justifyContent: "center",
-    width: "95%",
+    width: "80%",
   },
   primaryContainer: {
     flexBasis: "80%",

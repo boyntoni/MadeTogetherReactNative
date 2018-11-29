@@ -54,9 +54,7 @@ class VerifiyAccount extends Component {
                 <View style={{ flex: 1 }} />
                 <View style={{ flex: 1, alignItems: 'center', width: '100%' }}>
                     <TextInput
-                        autoCapitalize="none"
                         onFocus={() => this.setState({ errorText: null })}
-                        secureTextEntry={true}
                         onChangeText={(text) => this.setState({ verificationCode: text })}
                         style={primary.largeInputText}
                         placeholderTextColor={colors.white}

@@ -182,10 +182,10 @@ class AddGroup extends Component {
     return (
       <View style={containers.standardLayout}>
         <View style={{ flexDirection: "column", flexBasis: "60%", width: "100%"}}>
-          <View style={AddGroupStyles.headerContainer}>
-              <Text style={primary.promptFont}>Begin planning your next experience today</Text>
-          </View>
           <View style={AddGroupStyles.primaryContainer}>
+            <View style={AddGroupStyles.headerContainer}>
+              <Text style={primary.promptFont}>Begin planning your next experience today</Text>
+            </View>
             <View style={{ flexDirection: "column", flex: 1, width: "80%", justifyContent: "center", alignItems: "center" }}>
               <Text style={primary.primaryText}>{this.determineSecondaryText()}</Text>
             </View>

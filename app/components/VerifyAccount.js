@@ -24,31 +24,41 @@ class VerifiyAccount extends Component {
     state = {
         verificationCode: "",
         errorText: "",
+        newPassword: "",
     };
 
     submitCode = () => {
-        const { verificationCode } = this.state;
+        const { verificationCode, newPassword} = this.state;
         const { navigation, createAccount, setToken } = this.props;
         const username = navigation.getParam("username");
         const password = navigation.getParam("password");
-        Auth.confirmSignUp(username, verificationCode)
-        .then(() => {
-            Auth.signIn(username, password).then((userInfo) => {
-                const { signInUserSession } = userInfo;
-                const { jwtToken } = signInUserSession.idToken;
-                setToken(jwtToken);
-                createAccount(username, jwtToken, navigation.navigate);
-            }).catch(err => {
+        const forgotPassword = navigation.getParam("forgotPassword");
+        if (forgotPassword) {
+            Auth.forgotPasswordSubmit(username, verificationCode, newPassword)
+            .then(() => navigation.navigate("SignIn"))
+            .catch(() => this.setState({ errorText: "Unable to reset password, try again later" }));
+        } else {
+            Auth.confirmSignUp(username, verificationCode)
+            .then(() => {
+                Auth.signIn(username, password).then((userInfo) => {
+                    const { signInUserSession } = userInfo;
+                    const { jwtToken } = signInUserSession.idToken;
+                    setToken(jwtToken);
+                    createAccount(username, jwtToken, navigation.navigate);
+                }).catch(err => {
+                    this.setState({ errorText: err.message });
+                });
+            })
+            .catch((err) => {
                 this.setState({ errorText: err.message });
             });
-        })
-        .catch((err) => {
-            this.setState({ errorText: err.message});
-        });
+        }
     }
 
     render() {
         const { errorText } = this.state;
+        const { navigation } = this.props;
+        const forgotPassword = navigation.getParam("forgotPassword");
         return (
             <View style={containers.standardLayout}>
                 <View style={{ flex: 1 }} />
@@ -60,6 +70,15 @@ class VerifiyAccount extends Component {
                         placeholderTextColor={colors.white}
                         placeholder="Enter your verification code"
                     />
+                    <View style={{ height: 50 }}/>
+                    { forgotPassword && <TextInput
+                        secureTextEntry={true}
+                        onFocus={() => this.setState({ errorText: null })}
+                        onChangeText={(text) => this.setState({ newPassword: text })}
+                        style={primary.largeInputText}
+                        placeholderTextColor={colors.white}
+                        placeholder="Enter your new password"
+                    /> }
                     <View style={{ height: 50 }} />
                     <Button containerStyle={primary.wideButton}
                         style={primary.buttonFont}

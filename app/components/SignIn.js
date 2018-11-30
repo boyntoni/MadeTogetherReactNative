@@ -29,6 +29,7 @@ class SignIn extends Component {
     phoneNumber: "",
     errorText: "",
     isLoading: true,
+    forgotPassword: false,
   };
 
   componentDidMount() {
@@ -56,7 +57,7 @@ class SignIn extends Component {
       }
     }).catch(e => {
       this.setState({ isLoading: false });
-    })
+    });
   }
 
   renderInputs = (userAction) => {
@@ -67,20 +68,20 @@ class SignIn extends Component {
   }
 
   displayInputs = () => {
-    const { signingIn, userAction } = this.state;
+    const { signingIn, userAction, forgotPassword } = this.state;
     if (signingIn) {
       return (
         <View style={{flexDirection: "column", alignItems: "center", marginTop: 30, justifyContent: "space-around", flexBasis: "25%"}}>
           { userAction === "Register" && <TextInput autoCapitalize="none" onFocus={() => this.setState({ errorText: null })} onChangeText={(text) => this.setState({ phoneNumber: text })} style={primary.inputText} placeholderTextColor={colors.white} placeholder="Phone Number" /> }
           <TextInput autoCapitalize="none" onFocus={() => this.setState({ errorText: null })} onChangeText={(text) => this.setState({username: text})} style={primary.inputText} placeholderTextColor={colors.white} placeholder="Username" />
-          <TextInput autoCapitalize="none" onFocus={() => this.setState({ errorText: null })} secureTextEntry={true} onChangeText={(text) => this.setState({password: text})} style={primary.inputText} placeholderTextColor={colors.white} placeholder="Password" />
+          { !forgotPassword && <TextInput autoCapitalize="none" onFocus={() => this.setState({ errorText: null })} secureTextEntry={true} onChangeText={(text) => this.setState({password: text})} style={primary.inputText} placeholderTextColor={colors.white} placeholder="Password" /> }
         </View>
       );
     }
   }
 
   submitForm = () => {
-    const { userAction, phoneNumber } = this.state;
+    const { userAction, phoneNumber, forgotPassword } = this.state;
     const { navigation, fetchAccount } = this.props;
     const username = this.state.username.trim();
     const password = this.state.password.trim();
@@ -89,6 +90,28 @@ class SignIn extends Component {
       this.props.clearErrors();
     }
     if (validSubmission) {
+      if (forgotPassword) {
+        Auth.forgotPassword(username)
+          .then(() => {
+            this.toggleForgotPassword();
+            this.setState({
+              signingIn: false,
+              userAction: "",
+              username: "",
+              password: "",
+              phoneNumber: "",
+              errorText: "",
+              forgotPassword: false,
+            });
+            return navigation.navigate("VerifyAccount", {
+              username: username,
+              password: password,
+              forgotPassword: true,
+            });
+          }).catch((e) => {
+            return this.setState({ errorText: "Unable to locate username" });
+          });
+      }
       if (userAction === "Sign In") {
         Auth.signIn(username, password).then((user) => {
           const { username, signInUserSession } = user;
@@ -111,6 +134,7 @@ class SignIn extends Component {
           return navigation.navigate("VerifyAccount", {
             username: username,
             password: password,
+            forgotPassword: false,
           });
         }).catch(err => {
           this.setState({ errorText: err.message});
@@ -120,16 +144,16 @@ class SignIn extends Component {
   }
 
   validateForm = () => {
-    const { password, username, userAction } = this.state;
+    const { password, username, userAction, forgotPassword } = this.state;
     if (!username) {
       this.setState({ errorText: "You must enter a username" });
       return false;
     }
-    if (!password) {
+    if (!password && !forgotPassword) {
       this.setState({ errorText: "You must enter a password" });
       return false;
     }
-    if (password.length < 6) {
+    if (password.length < 6 && !forgotPassword) {
       if (userAction === "Register") {
         this.setState({ errorText: "Password must be more 6+ characters" });
       } else {
@@ -147,9 +171,14 @@ class SignIn extends Component {
     this.setState({userAction: newChoice});
   }
 
+  toggleForgotPassword = () => {
+    const { forgotPassword } = this.state;
+    this.setState({ forgotPassword: !forgotPassword, errorText: "", signingIn: !forgotPassword });
+  }
+
   displayButtons = () => {
-    const { userAction } = this.state;
-    if (!this.state.signingIn) {
+    const { userAction, signingIn, forgotPassword } = this.state;
+    if (!signingIn) {
       return (
       <View style={{flexDirection: "row", justifyContent: "center", alignItems:"center", marginTop: 60}}>
         <Button containerStyle={primary.button}
@@ -183,11 +212,17 @@ class SignIn extends Component {
                 onPress={this.submitForm}>
                 Submit
         </Button>
-        <Button containerStyle={primary.altWideButton}
-                style={primary.buttonFont}
-                onPress={this.changeUserAction} >
-                {altChoice}
-        </Button>
+        {!forgotPassword ? <Button containerStyle={primary.altWideButton}
+          style={primary.buttonFont}
+          onPress={this.changeUserAction} >
+          {altChoice}
+        </Button> :
+          <Button containerStyle={primary.altWideButton}
+            style={primary.buttonFont}
+            onPress={this.toggleForgotPassword} >
+            Return
+          </Button>
+        }
         <View style={containers.errorContainer}>
           <Text style={primary.errorText}>{this.state.errorText || this.props.errors}</Text>
         </View>
@@ -196,6 +231,7 @@ class SignIn extends Component {
   }
 
   render() {
+    const { forgotPassword, isLoading } = this.state;
     return (
       <View style={containers.standardLayout}>
           <View style={{flex: 2, flexDirection: "column", justifyContent: "flex-end", backgroundColor: colors.primary, width: "100%"}}>
@@ -204,6 +240,9 @@ class SignIn extends Component {
           <View style={{flex: 2.5, flexDirection: "column", justifyContent: "flex-start", width: "100%", backgroundColor: colors.secondary}}>
             { !this.state.isLoading && this.displayInputs() }
             {!this.state.isLoading && this.displayButtons()}
+            { !isLoading && <View style={{ justifyContent: "center", alignItems: "center", margin: 40 }}>
+              { !forgotPassword && <Text onPress={this.toggleForgotPassword} style={primary.forgotPassword}>Forgot Password?</Text> }
+            </View> }
           </View>
       </View>
     );

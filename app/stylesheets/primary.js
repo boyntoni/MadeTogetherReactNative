@@ -14,6 +14,12 @@ export const primary = StyleSheet.create({
     width: 64,
     marginBottom: 10,
   },
+  forgotPassword: {
+    fontSize: 16,
+    fontWeight: "200",
+    color: colors.white,
+    letterSpacing: 2,
+  },
   smallIcon: {
     height: 30,
     width: 30,

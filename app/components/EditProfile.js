@@ -88,7 +88,7 @@ class EditProfile extends Component {
         return (
             <View style={containers.standardLayout}>
                 <View style={{ flexDirection: "column", flexBasis: "70%", width: "100%" }}>
-                    <View style={AddGroupStyles.headerContainer}>
+                    <View style={AddGroupStyles.editProfileHeader}>
                         <Text style={primary.whitePromptFont}>Hi, {account.username}</Text>
                         <Text style={primary.whitePromptFont}>{ !changingPassword ? "Edit your profile below" : "Change your password below"}</Text>
                     </View>

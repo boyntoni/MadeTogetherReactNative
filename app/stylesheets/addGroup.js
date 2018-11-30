@@ -2,10 +2,16 @@ import { StyleSheet } from "react-native";
 import * as colors from "./colors";
 
 export const AddGroupStyles = StyleSheet.create({
+  editProfileHeader: {
+    flexBasis: "15%",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+  },
   headerContainer: {
     alignItems: "center",
     justifyContent: "center",
-    width: "80%",
+    width: "75%",
   },
   primaryContainer: {
     flexBasis: "80%",

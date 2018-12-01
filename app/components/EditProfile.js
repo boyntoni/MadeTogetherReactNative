@@ -73,6 +73,16 @@ class EditProfile extends Component {
             }).catch(() => this.setState({ errorText: "There was an issue updating your password. Try again", oldPassword: null, newPassword: null }));
     }
 
+    signOut = () => {
+        const { navigation } = this.props;
+        Auth.signOut()
+            .then(() => {
+                return navigation.navigate("SignIn");
+            }).catch((e) => {
+                this.setState({ errorText: "Unable to sign out. Try again."})
+            })
+    }
+
     handleNavigation = () => {
         const { hasChangedGroup } = this.state;
         const { navigation } = this.props;
@@ -117,6 +127,17 @@ class EditProfile extends Component {
                                         accessibilityLabel="Submit"
                                         onPress={this.handleRemove}>
                                         {ownerIsUser ? "Delete" : "Leave" }
+                                    </Button>
+                                </View>
+                                <View style={{ flexDirection: "column", flex: 0.3, width: "80%", justifyContent: "space-around", alignItems: "center" }}>
+                                    <Button
+                                        containerStyle={primary.altShortButton}
+                                        style={primary.buttonFont}
+                                        title="Sign Out"
+                                        name="Sign Out"
+                                        accessibilityLabel="Sign Out"
+                                        onPress={this.signOut}>
+                                        Sign Out
                                     </Button>
                                 </View>
                             </View>

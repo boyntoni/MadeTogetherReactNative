@@ -118,6 +118,12 @@ class SignIn extends Component {
           const { jwtToken } = signInUserSession.idToken;
           setToken(jwtToken);
           fetchAccount(username, navigation.navigate);
+          this.setState({
+            username: "",
+            password: "",
+            phoneNumber: "",
+            isLoading: false,
+          });
           return navigation.navigate("LoadingSpinner");
         }).catch(err => {
           this.setState({ errorText: err.message});
@@ -131,6 +137,12 @@ class SignIn extends Component {
             phone_number,
           }
         }).then(() => {
+          this.setState({
+            username: "",
+            password: "",
+            phoneNumber: "",
+            isLoading: false,
+          });
           return navigation.navigate("VerifyAccount", {
             username: username,
             password: password,

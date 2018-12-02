@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ActionButton from "react-native-action-button";
 import Icon from "react-native-vector-icons/Ionicons";
-import { showLocation } from "react-native-map-link";
+import openMap from "react-native-open-maps";
 import { withNavigation } from "react-navigation";
 import Permissions from 'react-native-permissions'
 
@@ -167,15 +167,12 @@ class RestaurantList extends Component {
   }
 
   openInMaps = (restaurant) => {
-    const { geolocation } = this.props;
-    showLocation({
-      sourceLatitude: geolocation.latitude,
-      sourceLongitude: geolocation.longitude,
+    openMap({
       latitude: restaurant.latitude,
       longitude: restaurant.longitude,
-      title: restaurant.name,
-      googleForceLatLon: false,
-      app: "google-maps"
+      travelType: "public_transport",
+      end: restaurant.name,
+      provider: "google"
     });
   }
   

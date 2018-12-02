@@ -13,6 +13,9 @@ export const fetchAccount = (username, navigate, jwtToken) => {
       }
     }).then(response => response.json())
       .then((account) => {
+        if (account.errorMessage) {
+          throw new Error (account.errorMessage);
+        }
         dispatch({ type: types.FETCH_ACCOUNT_SUCCESS, account });
         if (account.groupId) {
           return navigate("GroupHome");

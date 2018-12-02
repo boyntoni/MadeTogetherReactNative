@@ -50,8 +50,8 @@ class AddRestaurant extends Component {
   }
 
   searchRestaurants = () => {
-    const { longitude, latitude, searchTerm, searchParamater } = this.state;
-    const { navigation, jwtToken } = this.props;
+    const { searchTerm, searchParamater } = this.state;
+    const { navigation, jwtToken, geolocation } = this.props;
     if (!searchTerm) {
       return this.setState({ error: "Please enter a valid search" });
     }
@@ -59,12 +59,14 @@ class AddRestaurant extends Component {
     if (searchParamater !== "near") {
       searchAddress = this.concatSearchTerms();
     }
+    const { longitude, latitude } = geolocation;
     const searchData = {
       longitude,
       searchAddress,
       latitude,
       searchTerm,
     };
+    console.log(searchData);
     this.props.searchRestaurants(searchData, jwtToken, navigation.navigate);
     return navigation.navigate("LoadingSpinner")
   }

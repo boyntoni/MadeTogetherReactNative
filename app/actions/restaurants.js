@@ -15,13 +15,13 @@ export const searchRestaurants = (searchData, jwtToken, navigate) => {
 		}).then(response => response.json())
     .then((restaurants) => {
         if (restaurants.errorMessage) {
-          throw new Error(responseJson.errorMessage);
+          throw new Error(restaurants.errorMessage);
         }
         dispatch({type: types.FETCH_RESTAURANTS_SEARCH_SUCCESS, restaurants });
         return navigate("RestaurantSearchResultList");
       }).catch((error) => {
-
         dispatch({ type: types.ERROR_HANDLER, payload: error.message });
+        return navigate("AddRestaurant");
       })
   }
 }

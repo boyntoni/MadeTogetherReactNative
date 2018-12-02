@@ -96,10 +96,11 @@ export default class RestaurantFilter extends Component {
     }
 
     render() {
+        const { hasGeo } = this.props;
         return (
             <View style={containers.filterContainer}>
                 <View style={containers.filterFieldContainer}>
-                    <View style={containers.filterButtonContainer}>
+                    { hasGeo && <View style={containers.filterButtonContainer}>
                         <Button containerStyle={primary.filterButton}
                             style={this.isActiveFilter("near")}
                             title="Near Me Filter"
@@ -108,7 +109,7 @@ export default class RestaurantFilter extends Component {
                             onPress={ () => { this.handleFilter("near") }}>
                             Near Me
                         </Button>
-                    </View>
+                    </View> }
                     <View style={containers.filterButtonContainer}>
                         <Button containerStyle={primary.filterButton}
                             style={this.isActiveFilter("price")}

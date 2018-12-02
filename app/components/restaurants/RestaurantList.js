@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, ScrollView } from "react-native";
+import { Text, View, ScrollView, Alert } from "react-native";
 import Button from "react-native-button";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -7,10 +7,12 @@ import ActionButton from "react-native-action-button";
 import Icon from "react-native-vector-icons/Ionicons";
 import { showLocation } from "react-native-map-link";
 import { withNavigation } from "react-navigation";
+import Permissions from 'react-native-permissions'
 
 import RestaurantTile from "./RestaurantTile";
 import RestaurantFilter from "./RestaurantFilter";
 import PrimaryFilter from "../PrimaryFilter";
+import { setGeolocationData } from "../../actions/geolocation";
 
 import { removeItem, addFavorite } from "../../actions/items";
 
@@ -52,6 +54,47 @@ class RestaurantList extends Component {
     this.populateData(restaurantData);
   }
 
+  componentDidMount() {
+    this.fetchLocation();
+    setTimeout(this.locationAlert, 1500);
+  }
+
+  fetchLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.props.setGeolocationData({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      () => { this.setState({ errorText: "Unable to set location" }) },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000000, distanceFilter: 10 },
+    );
+  }
+
+  locationAlert = () => {
+    if (!this.props.geolocation.latitude) {
+      Alert.alert(
+        'Enable Location Services',
+        'MadeTogether uses your location to find restaurants by you',
+        [
+          { text: 'OK', onPress: () => this.requestGeolocationAccess() },
+          { text: 'Cancel', style: 'cancel' },
+        ],
+        { cancelable: false }
+      )
+    }
+  }
+
+  requestGeolocationAccess = () => {
+    Permissions.request('location').then(response => {
+      if (response === "authorized") {
+        this.fetchLocation();
+      }
+      return;
+    });
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.group.restaurants.length < this.props.group.restaurants.length) {
       this.populateData(this.props.group.restaurants);
@@ -65,16 +108,19 @@ class RestaurantList extends Component {
     let favoritesPriceFilters = [];
 
     if (restaurants.length) {
+
       const allRestaurantsWithGeo = restaurants.map((restaurant) => {
         restaurant.distanceFromUser = this.calculateDistance(restaurant.latitude, restaurant.longitude);
         return restaurant;
       });
 
-      restaurantsToDo = allRestaurantsWithGeo.filter((restaurant) => {
+      const allRestaurants = this.props.geolocation.latitude ? allRestaurantsWithGeo : restaurants;
+
+      restaurantsToDo = allRestaurants.filter((restaurant) => {
         return !restaurant.isFavorite;
       });
 
-      restaurantsFavorites = allRestaurantsWithGeo.filter((restaurant) => {
+      restaurantsFavorites = allRestaurants.filter((restaurant) => {
         return restaurant.isFavorite;
       });
 
@@ -308,16 +354,18 @@ class RestaurantList extends Component {
 
   render() {
     const { activeRestaurants, filterValue, primaryFilter, restaurants } = this.state;
+    const { geolocation } = this.props;
     const priceFilters = restaurants.filters[primaryFilter].price;
+    const hasGeo = !!geolocation.latitude;
     const calculatedHeight = activeRestaurants.length * 250;
     
     return (
       <View style={containers.standardLayout}>
-        <View style={{ flexBasis: "10%" }}>
+        <View style={{ flexBasis: "10%", justifyContent: "center", alignItems: "center" }}>
           <Text style={primary.header}>Restaurants</Text>
         </View>
         { restaurants.toDo.length || restaurants.favorites.length ? <PrimaryFilter handlePrimaryFilter={this.handlePrimaryFilter} /> : null }
-        {activeRestaurants.length ? <RestaurantFilter filterValue={filterValue} handleFilterValue={this.handleFilterValue} handleFilter={this.handleFilter} priceFilters={priceFilters} /> : null }
+        {activeRestaurants.length ? <RestaurantFilter  hasGeo={hasGeo} filterValue={filterValue} handleFilterValue={this.handleFilterValue} handleFilter={this.handleFilter} priceFilters={priceFilters} /> : null }
         { restaurants.toDo.length || restaurants.favorites.length ? <ScrollView contentContainerStyle={{ paddingBottom: 100, flexDirection: "column", justifyContent: "flex-start", alignItems: "center" }} style={{ height: calculatedHeight, width: "100%" }}>
           <View style={{ flexBasis: "80%", flexDirection: "column", width: "100%", justifyContent: "flex-start", alignItems: "center" }}>
             {this.renderRestaurantTiles()}
@@ -332,7 +380,7 @@ class RestaurantList extends Component {
           <ActionButton.Item buttonColor={colors.primary} onPress={() => { this.props.navigation.navigate("AddRestaurant") }}>
             <Icon name="md-add" style={primary.actionButtonIcon} />
           </ActionButton.Item>
-          { activeRestaurants.length && <ActionButton.Item buttonColor="#1abc9c" onPress={() => { this.props.navigation.navigate("RestaurantMap", { searchView: "saved" }) }}>
+          { activeRestaurants.length && hasGeo && <ActionButton.Item buttonColor="#1abc9c" onPress={() => { this.props.navigation.navigate("RestaurantMap", { searchView: "saved" }) }}>
             <Icon name="md-map" style={primary.actionButtonIcon} />
           </ActionButton.Item> }
         </ActionButton> :
@@ -364,6 +412,7 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     removeItem,
     addFavorite,
+    setGeolocationData,
   }, dispatch)
 }
 

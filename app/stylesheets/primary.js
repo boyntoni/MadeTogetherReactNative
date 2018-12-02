@@ -144,6 +144,13 @@ export const primary = StyleSheet.create({
     textAlign: "center",
     marginBottom: 15
   },
+  warningMessage: {
+    fontSize: 14,
+    fontWeight: "300",
+    letterSpacing: 1.50,
+    color: colors.white,
+    textAlign: "center",
+  },
   inputText: {
     width: "100%",
     fontWeight: "300",

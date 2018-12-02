@@ -36,17 +36,11 @@ class AddRestaurant extends Component {
   }
 
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
-        });
-      },
-      (error) => this.setState({ error: error.message }),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000000 },
-    );
+    if (!this.props.geolocation.latitude) {
+      this.setState({
+        searchParamater: "address",
+      });
+    }
   }
 
   toggleSearchParam = (newSearch) => {
@@ -112,7 +106,7 @@ class AddRestaurant extends Component {
 
   render() {
     const { searchParamater, error } = this.state;
-    const { serverError } = this.props;
+    const { serverError, geolocation } = this.props;
     const displayError = error ? error : serverError;
     const nearSearchColor = searchParamater === "near" ? colors.primary : colors.lightGrey;
     const  locationSearchColor = searchParamater === "near" ? colors.lightGrey : colors.primary;
@@ -125,7 +119,7 @@ class AddRestaurant extends Component {
                       placeholderTextColor={colors.white}
                       placeholder="Search for a restaurant or cuisine" />
               <View style={containers.spaceAroundRow}>
-                <Button containerStyle={{paddingTop: 10,
+                { geolocation.latitude && <Button containerStyle={{paddingTop: 10,
                     paddingBottom: 10,
                     height: 40,
                     width: 150,
@@ -137,7 +131,7 @@ class AddRestaurant extends Component {
                     accessibilityLabel="Search By My Location"
                     onPress={() => { this.toggleSearchParam("near") }}>
                     Near Me
-                </Button>
+                </Button> }
                 <Button containerStyle={{
                   paddingTop: 10,
                   paddingBottom: 10,
@@ -186,6 +180,7 @@ const mapStateToProps = (state) => ({
   account: state.account,
   serverError: state.errors,
   jwtToken: state.jwtToken,
+  geolocation: state.geolocation,
 });
 
 const mapDispatchToProps = (dispatch) => {

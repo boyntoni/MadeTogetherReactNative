@@ -7,7 +7,6 @@ import { withNavigation } from "react-navigation";
 import { Auth } from "aws-amplify";
 
 import { createAccount, fetchAccount, setToken } from "../actions/account";
-import { setGeolocationData } from "../actions/geolocation";
 import { clearErrors } from "../actions/errors";
 
 import * as colors from "../stylesheets/colors";
@@ -34,16 +33,6 @@ class SignIn extends Component {
 
   componentDidMount() {
     const { navigation, fetchAccount, setToken } = this.props;
-    this.watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        this.props.setGeolocationData({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        });
-      },
-      (error) => this.setState({ errorText: error.message }),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000000, distanceFilter: 10 },
-    );
     // Handle current session/log-in
     Auth.currentAuthenticatedUser().then((user) => {
       const { username, signInUserSession } = user;
@@ -273,7 +262,6 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     createAccount,
     fetchAccount,
-    setGeolocationData,
     clearErrors,
     setToken,
   }, dispatch);

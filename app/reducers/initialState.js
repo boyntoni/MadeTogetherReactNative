@@ -3,6 +3,7 @@ export default {
 		username: null,
 		groupId: null,
 		groupInvitations: [],
+		hasAcknowledgedGeo: false,
 	},
 	restaurants: [],
 	geolocation: {

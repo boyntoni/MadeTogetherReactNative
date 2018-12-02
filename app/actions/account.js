@@ -55,6 +55,12 @@ export const setToken = (token) => {
   };
 }
 
+export const userAcknowledgeGeo = () => {
+    return (dispatch) => {
+      return dispatch({ type: types.USER_ACNKNOWLEDGE_GEO });
+    }
+}
+
 
 
 

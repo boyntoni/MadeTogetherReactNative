@@ -15,6 +15,7 @@ import PrimaryFilter from "../PrimaryFilter";
 import { setGeolocationData } from "../../actions/geolocation";
 
 import { removeItem, addFavorite } from "../../actions/items";
+import { userAcknowledgeGeo } from "../../actions/account";
 
 import * as colors from "../../stylesheets/colors";
 import { containers } from "../../stylesheets/containers";
@@ -73,13 +74,13 @@ class RestaurantList extends Component {
   }
 
   locationAlert = () => {
-    if (!this.props.geolocation.latitude) {
+    if (!this.props.geolocation.latitude && !this.props.account.hasAcknowledgedGeo) {
       Alert.alert(
         'Enable Location Services',
         'MadeTogether uses your location to find restaurants by you',
         [
           { text: 'OK', onPress: () => this.requestGeolocationAccess() },
-          { text: 'Cancel', style: 'cancel' },
+          { text: 'Cancel', onPress: () => this.userAcknowledgeGeo(), style: 'cancel' },
         ],
         { cancelable: false }
       )
@@ -91,8 +92,13 @@ class RestaurantList extends Component {
       if (response === "authorized") {
         this.fetchLocation();
       }
+      this.userAcknowledgeGeo();
       return;
     });
+  }
+
+  userAcknowledgeGeo = () => {
+    this.props.userAcknowledgeGeo();
   }
 
   componentDidUpdate(prevProps) {
@@ -419,6 +425,7 @@ const mapDispatchToProps = (dispatch) => {
     removeItem,
     addFavorite,
     setGeolocationData,
+    userAcknowledgeGeo,
   }, dispatch)
 }
 

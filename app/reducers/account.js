@@ -18,6 +18,8 @@ export default function accountReducer(state = initialState.account, action) {
 			return Object.assign({}, state, { groupInvitations: newInvitations, groupId: action.groupId });
 		case types.CREATE_GROUP_SUCCESS:
 			return Object.assign({}, state, { groupId: action.groupId });
+		case types.USER_ACNKNOWLEDGE_GEO:
+			return Object.assign({}, state, { hasAcknowledgedGeo: true });
 		default:
 			return state;
 	}

@@ -380,11 +380,16 @@ class RestaurantList extends Component {
           <ActionButton.Item buttonColor={colors.primary} onPress={() => { this.props.navigation.navigate("AddRestaurant") }}>
             <Icon name="md-add" style={primary.actionButtonIcon} />
           </ActionButton.Item>
-          { activeRestaurants.length && hasGeo && <ActionButton.Item buttonColor="#1abc9c" onPress={() => { this.props.navigation.navigate("RestaurantMap", { searchView: "saved" }) }}>
+          <ActionButton.Item buttonColor="#1abc9c" onPress={() => { this.props.navigation.navigate("RestaurantMap", { searchView: "saved" }) }}>
             <Icon name="md-map" style={primary.actionButtonIcon} />
-          </ActionButton.Item> }
+          </ActionButton.Item>
         </ActionButton> :
-        null
+        <ActionButton
+          buttonColor={colors.primary}
+          name="md-add"
+          position="right"
+          onPress={() => { this.props.navigation.navigate("AddRestaurant") }}
+        />
        }
         <ActionButton
           buttonColor={colors.primary}

@@ -21,13 +21,15 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.2</string>
+	<string>2.5</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<false/>
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>localhost</key>
@@ -37,12 +39,24 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleEventsUsageDescription</key>
+	<string></string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>MadeTogether does not require access to your music library.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>MadeTogether does not require access to bluetooth.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>MadeTogether does not require access to your calendar.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>MadeTogether uses your location when searching for restaurants near you.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>MadeTogether uses your location when searching for restaurants near you.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>MadeTogether uses your location when searching for restaurants near you.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>MadeTogether does not require access to your motion.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>MadeTogether does not require access to speech recognition.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

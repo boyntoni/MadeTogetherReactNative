@@ -375,7 +375,7 @@ class RestaurantList extends Component {
           {(!restaurants.toDo.length && !restaurants.favorites.length) && this.renderNoItem()}
         </View> 
         }
-        { (restaurants.toDo.length || restaurants.favorites.length) && hasGeo ? 
+        { ((restaurants.toDo.length || restaurants.favorites.length) && !!hasGeo) &&
         <ActionButton buttonColor={colors.primary}>
           <ActionButton.Item buttonColor={colors.primary} onPress={() => { this.props.navigation.navigate("AddRestaurant") }}>
             <Icon name="md-add" style={primary.actionButtonIcon} />
@@ -383,7 +383,8 @@ class RestaurantList extends Component {
           <ActionButton.Item buttonColor="#1abc9c" onPress={() => { this.props.navigation.navigate("RestaurantMap", { searchView: "saved" }) }}>
             <Icon name="md-map" style={primary.actionButtonIcon} />
           </ActionButton.Item>
-        </ActionButton> :
+        </ActionButton> }
+        { ((restaurants.toDo.length || restaurants.favorites.length) && !hasGeo) &&
         <ActionButton
           buttonColor={colors.primary}
           name="md-add"

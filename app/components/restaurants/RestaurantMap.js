@@ -44,7 +44,6 @@ class RestaurantMap extends Component {
     });
     const userLocation =  { latitude: geolocation.latitude, longitude: geolocation.longitude };
     restaurantCoords.push(userLocation);
-    console.log(restaurantCoords);
     return restaurantCoords;
   }
 

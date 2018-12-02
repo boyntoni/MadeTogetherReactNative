@@ -36,14 +36,37 @@ class RestaurantMap extends Component {
     });
   }
 
+  generateNewBoundingCoords = (restaurant) => {
+    const { latitude, longitude } = restaurant;
+    const adjustmentDistance = 1000;
+    const earthRadius = 6378.137;
+    const pi = Math.PI;
+    const cos = Math.cos;
+    const m = (1 / ((2 * pi / 360) * earthRadius)) / 1000;
+    const newLat = latitude + (adjustmentDistance * m);
+    const newLong = longitude + (adjustmentDistance * m) / cos(latitude * (pi / 180));
+    return {
+      newLat,
+      newLong,
+    }
+  }
+
   generateMarkerCoords = () => {
     const { restaurantList } = this.state;
     const { geolocation } = this.props;
+    let maxDistance = 0;
+    let maxCoord;
     const restaurantCoords = restaurantList.map((restaurant) => {
+      if (restaurant.distanceFromUser > maxDistance) {
+        maxDistance = restaurant.distanceFromUser;
+        maxCoord = this.generateNewBoundingCoords(restaurant);
+      }
       return { latitude: restaurant.latitude, longitude: restaurant.longitude }
     });
     const userLocation =  { latitude: geolocation.latitude, longitude: geolocation.longitude };
     restaurantCoords.push(userLocation);
+    restaurantCoords.push(maxCoord);
+    console.log(restaurantCoords);
     return restaurantCoords;
   }
 

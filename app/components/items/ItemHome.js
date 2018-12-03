@@ -87,9 +87,8 @@ class ItemHome extends Component {
                 return item.name !== itemName;
             });
         }
-
         const itemDetails = {
-            removedItem: itemName,
+            itemName,
             itemType,
             groupId: group.id,
         };

@@ -119,9 +119,10 @@ class AddRestaurant extends Component {
                       onChangeText={(text) => this.setState({ searchTerm: text })} 
                       onFocus={() => { this.setState({ error: null })}}
                       placeholderTextColor={colors.white}
-                      placeholder="Search for a restaurant or cuisine" />
+                      placeholder="Name of restaurant or cuisine" />
+          { geolocation.latitude && 
               <View style={containers.spaceAroundRow}>
-                { geolocation.latitude && <Button containerStyle={{paddingTop: 10,
+                 <Button containerStyle={{paddingTop: 10,
                     paddingBottom: 10,
                     height: 40,
                     width: 150,
@@ -133,7 +134,7 @@ class AddRestaurant extends Component {
                     accessibilityLabel="Search By My Location"
                     onPress={() => { this.toggleSearchParam("near") }}>
                     Near Me
-                </Button> }
+                </Button>
                 <Button containerStyle={{
                   paddingTop: 10,
                   paddingBottom: 10,
@@ -148,8 +149,10 @@ class AddRestaurant extends Component {
                   accessibilityLabel="Search By Address"
                   onPress={() => { this.toggleSearchParam("address") }}>
                   Near Address
-                </Button>
+              </Button> 
               </View>
+            }
+            <View style={{ width: "100%", height: 30, borderTopWidth: 1, borderTopColor: colors.white }} />
               {searchParamater === "near" ? <View style={containers.addressContainer} /> : <AddressSearchFields setStreet={this.setStreetAddress} setCity={this.setCity} setZip={this.setZip} /> }
             <View style={{ height: 30 }} /> 
             <View style={{ flexBasis: "20%", flexDirection: "column", justifyContent: "space-around", alignItems: "center" }}>

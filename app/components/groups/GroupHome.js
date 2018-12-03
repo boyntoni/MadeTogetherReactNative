@@ -39,7 +39,7 @@ class GroupHome extends Component {
     }
 
     initiatePolling = () => {
-        const pollingInterval = setInterval(this.fetchGroupUpdates, 20000);
+        const pollingInterval = setInterval(this.fetchGroupUpdates, 30000);
         this.setState({
             pollingInterval,
         })
@@ -51,7 +51,10 @@ class GroupHome extends Component {
     }
 
     componentWillUnmount() {
-        clearInterval(this.pollingInterval);
+        this.setState({
+            pollingInterval: null,
+        });
+        clearInterval(this.state.pollingInterval);
     }
 
     renderImages = () => {

@@ -180,7 +180,7 @@ class RestaurantList extends Component {
     const { group } = this.props;
 
     const itemDetails = {
-      removedItem: restaurant.name,
+      itemName: restaurant.name,
       itemType: "restaurants",
       groupId: group.id,
     };

@@ -28,8 +28,8 @@ class RestaurantMap extends Component {
 
   componentWillMount() {
     const { searchView } = this.props.navigation.state.params;
-    const { group, restaurantData } = this.props;
-    const restaurantList = searchView === "search" ? restaurantData.searchResults : group.restaurants;
+    const { group, restaurants } = this.props;
+    const restaurantList = searchView === "search" ? restaurants : group.restaurants;
     this.setState( {
       searchView: searchView,
       restaurantList: restaurantList,
